@@ -27,58 +27,83 @@ const regEx = {
     'logicOpes': /(&&|>=|<=|==|!=|>|<)/
 }
 
-const compile = () => {
-    let syntax = (document.getElementById('code-i').value).trim();
-    let lines = syntax.split('\n');
-    let wheresBegin = lines.indexOf('BEGIN'); // FUNCTION
-    // TO WORK WITHOUTH TOUCHING THE PRINCIPALC LINES ARRAY (COMPLETE SYNTAX)
-    let li = lines.slice(0);
-    let l = lines.slice(0);
-    l.length = wheresBegin; // array w just the declared vars lines
-    // TO WORK WITHOUTH TOUCHING THE PRINCIPAL
-    let declaredVars = [];
-    let assignedVars = [];
+const $ = (id) => document.getElementById(id);
 
-    let declaredVarsOk = (l.every(checkArray)); // CHECK IF ALL THE VARS WERE CORRECTLY DECLARED
+const compilerEvent = () => {
+    console.log('asdad')
+    $('output-text').innerHTML = 'Compiling...';
+    $('output-text').style.color = 'black';
+    setTimeout(compiler, 1000);
+}
 
-    if (declaredVarsOk) {
-        li.map((l) => ((l.includes('var') ? lines.splice(l.indexOf('var'), 1) : false))); // DELETING DECLARATED VARS
-        let funcc = (lines.join()).replace(/,/g, '\n'); // TRANSFORM ARRAY TO STRING WITH JOIN(), THEN REPLACE ALL COMMAS (,) WITH \n
-        if (regEx.checkFunction.test(funcc)) { // CHECK ALL THE FUNCTION, FROM 'BEGIN' TO 'END'
-            let func = (funcc.split('\n')).slice(1, -1); // GETTING WHAT IS WRITED BETWEEN -BEGIN- && -END- (VAR ASSIGNMENT)
-            l.map((li) => declaredVars.push(li.split(' ')[1])); // PUSH INTO DECLAREDVARS ARRAY THE DECLARED VARS
-            func.map((line) => {
-                console.log(line)
-                if (regEx.assignVar.test(line)) { // CHECK THE DECLARED VAR ASSIGNMENT (VARIABLEHERE := ASD OR NUMBER OR NUMER>5)
-                    if(regEx.logicOpes.test((line.split(':='))[1].trim())) {
-                        let ope = (line.split(':='))[1].trim();
-                        try {
-                            console.log('Variable: ' + line + ' es operacion logica. y el resultado es: ' + eval(ope));
-                        } catch (e) {
-                            console.error('INVALID LOGIC OPERATION.. LINE -> ' + e);
+const compiler = () => {
+    try {
+        let syntax = (document.getElementById('code-i').value).trim();
+        let lines = syntax.split('\n');
+        let wheresBegin = lines.indexOf('BEGIN'); // FUNCTION
+        // TO WORK WITHOUTH TOUCHING THE PRINCIPALC LINES ARRAY (COMPLETE SYNTAX)
+        let li = lines.slice(0);
+        let l = lines.slice(0);
+        l.length = wheresBegin; // array w just the declared vars lines
+        // TO WORK WITHOUTH TOUCHING THE PRINCIPAL
+        let declaredVars = [];
+        let assignedVars = [];
+
+        let declaredVarsOk = (l.every(checkArray)); // CHECK IF ALL THE VARS WERE CORRECTLY DECLARED
+
+        if (declaredVarsOk) {
+
+            li.map((l) => ((l.includes('var') ? lines.splice(l.indexOf('var'), 1) : false))); // DELETING DECLARATED VARS
+            let funcc = (lines.join()).replace(/,/g, '\n'); // TRANSFORM ARRAY TO STRING WITH JOIN(), THEN REPLACE ALL COMMAS (,) WITH \n
+            if (regEx.checkFunction.test(funcc)) { // CHECK ALL THE FUNCTION, FROM 'BEGIN' TO 'END'
+                let func = (funcc.split('\n')).slice(1, -1); // GETTING WHAT IS WRITED BETWEEN -BEGIN- && -END- (VAR ASSIGNMENT)
+                l.map((li) => declaredVars.push(li.split(' ')[1])); // PUSH INTO DECLAREDVARS ARRAY THE DECLARED VARS
+                func.map((line) => {
+                    console.log(line)
+                    if (regEx.assignVar.test(line)) { // CHECK THE DECLARED VAR ASSIGNMENT (VARIABLEHERE := ASD OR NUMBER OR NUMER>5)
+                        if (regEx.logicOpes.test((line.split(':='))[1].trim())) {
+                            let ope = (line.split(':='))[1].trim();
+                            try {
+                                console.log('Variable: ' + line + ' es operacion logica. y el resultado es: ' + eval(ope));
+                            } catch (e) {
+                                console.error('INVALID LOGIC OPERATION.. LINE -> ' + e);
+                                compilerOutput(false, 'ERROR. OPERACIÓN LÓGICA INVÁLIDA');
+                            }
                         }
+                        console.log('Variables asignadas correctamente');
+                        assignedVars.push(line.split(' ')[0]); //  PUSH INTO ASSIGNEDVARS ARRAY THE ASSIGEND VARS                    
+                        // checkDataType('', line) ;orks!!!!!!!!!
+                    } else {
+                        console.log('ERROR... CHECK YOUR VARS ASSIGMENT OR LOGIC OPERATORS');
+                        compilerOutput(false, 'ERROR -> ASIGNACIÓN DE VARIABLES, LOGIC OPERATORS ó ;');
                     }
-                    console.log('Variables asignadas correctamente');
-                    assignedVars.push(line.split(' ')[0]); //  PUSH INTO ASSIGNEDVARS ARRAY THE ASSIGEND VARS                    
-                    // checkDataType('', line) ;orks!!!!!!!!!
-                } else {
-                    console.log('ERROR... CHECK YOUR VARS ASSIGMENT OR LOGIC OPERATORS');
-                }
-            });
-            let c = 0;
-            declaredVars.map((dv) => ((assignedVars.includes(dv)) ? c++ : false));
-            ((c++ === assignedVars.length) ? alert('TODO OK POR AHORA') : alert('VARIABLE ASIGNADA NO ES LA MISMA A LA DECLARADA'));
-            console.log(declaredVars);
-            console.log(assignedVars)
+                });
+                let c = 0;
+                declaredVars.map((dv) => ((assignedVars.includes(dv)) ? c++ : false));
+                ((c++ === assignedVars.length) ? (compilerOutput(true, 'SUCCESSFUL COMPILATION')) : (compilerOutput(false, 'ERROR. ASSIGNED VAR DOES NOT MATCH TO DECLARED ONES')));
+                console.log(declaredVars);
+                console.log(assignedVars)
+            } else {
+                console.log('ERROR EN CHECK DE LA FUNCIÓN');
+                compilerOutput(false, 'ERROR ON -> PROCEDURE -> BEGIN TO END ');
+            }
+
         } else {
-            console.log('ERROR EN CHECK DE LA FUNCIÓN');
+            console.error('MALA DECLARACION DE VARIABLES');
+            compilerOutput(false, 'ERROR. DECLARACIÓN DE VARIABLES');
         }
-    } else {
-        console.error('MALA DECLARACION DE VARIABLES');
+    } catch (e) {
+        console.log('Error->' + e);
+        compilerOutput(false, 'ERROR. CHECK SYNTAX');
     }
 }
 
 const checkArray = elem => regEx.varDeclaration.test(elem);
+
+const compilerOutput = (success, msg) => {
+    $('output-text').innerHTML = msg;
+    ((success) ? $('output-text').style.color = 'rgb(27, 170, 27)' : $('output-text').style.color = 'red');
+}
 
 const checkDataType = (datatype, s) => {
     console.log(datatype)

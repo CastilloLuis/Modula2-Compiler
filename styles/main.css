@@ -1,0 +1,37 @@
+* {
+    font-family: System, Courier, monospace;
+    font-weight: bold;
+    color: white;
+}
+
+#code-i {
+    background: black;
+    color: white;
+    border: 1px solid white;
+    outline: none;
+    resize: none
+}
+
+#compiler-opt {
+    width: 90%;
+}
+#compile-button {
+    background: transparent;
+    color: rgb(27, 170, 27);
+    border: 1px solid white;
+    font-size: 25px;
+    width: 50px;
+    height: 38px;
+    line-height: 0px;
+    transition: all 0.4s;
+}
+#compile-button:hover {
+    background-color: rgb(102, 102, 102);
+}
+#output {
+    background: white;
+    /*background: rgb(226, 21, 21);*/
+    color: black;
+    padding: 5px 5px;
+}
+#output span {color: black};

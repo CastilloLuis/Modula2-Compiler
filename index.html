@@ -3,15 +3,34 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Modula-2 Compiler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="styles/main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="node_modules/bootstrap/dist/css/bootstrap.css" />
 </head>
-<body>
+<body style="background: black">
+    <div class="container text-center">
+        <h1>MODULA-2 COMPILER</h1>
+        <textarea rows="20" cols="80" id="code-i"></textarea> <br>
+        <div id="compiler-opt" class="container">
+            <div class="row">
+                <div class="col-1">
+                    <button id="compile-button" type="button" onclick="compilerEvent()">►</button>
+                </div>
+                <div class="col-11">
+                    <h4 id="output">
+                        OUTPUT: <span id="output-text">EMPTY</span>
+                    </h4>
+                </div>
+            </div>
+            
+            
+        </div>
+        <!--<input type="text" id="logic-i"><br> <br>-->
+        <!--<button type="button" onclick="compile()">COMPILE THIS $HIT</button> <br><br>-->
+    </div>
     
-    <textarea rows="10" cols="30" id="code-i"></textarea> <br>
-    <input type="text" id="logic-i"><br> <br>
-    <button type="button" onclick="compile()">COMPILE THIS $HIT</button> <br><br>
     <!--<button type="button" onclick="checkDataType(null)">CHECK DATA TYPE</button>-->
     <script src="scripts/main.js"></script>
 
