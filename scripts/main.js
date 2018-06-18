@@ -30,10 +30,11 @@ const regEx = {
     'checkVar': /^(var)/i,
     'checkFunction': /^(BEGIN)\n(.*?(\n))+.*?\n(END)\s([A-Za-z]+)\.$/, // 
     // old function 'checkFunction': /^(BEGIN)\n(([A-Za-z]+)|([0-9]+)|:=)\n(END)\s([A-Za-z]+)\.$/,
-    'assignVar': /^([A-Za-z]+)\s:=\s(([A-Za-z]+)|(")([A-Za-z]+)(")|(([0-9]+))|(([0-9]+)(&&|>=|<=|==|!=|>|<)([0-9]+)));$/,
+    'assignVar': /^([A-Za-z]+)\s:=\s(([A-Za-z]+)|(")([A-Za-z]+)(")|((-)?([0-9]+))|((-)?([0-9]+)\.([0-9]+))|((-)?([0-9]+)(&&|>=|<=|==|!=|>|<)((-)?[0-9]+)));$/,
     //'assignVar': /^([A-Za-z]+)\s:=\s(((([A-Za-z]+)|([0-9]+))(&&|>=|<=|==|!=|>|<)[0-9]));$/,
     'logicOpes': /(&&|>=|<=|==|!=|>|<)/
 }
+
 let compiled = [];
 
 const $ = (id) => document.getElementById(id);
